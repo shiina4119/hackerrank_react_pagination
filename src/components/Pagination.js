@@ -1,26 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "./Table";
 
 const Pagination = ({ data }) => {
+  const [rows, setRows] = useState("5");
+  const [pages, setPages] = useState(Math.ceil(data.length / parseInt(rows)));
+  const [range, setRange] = useState([0, 14]);
   return (
     <>
       <div className="card flex justify-content-center align-items-center px-50 py-40 my-20 input-div">
         <form onSubmit={(e) => e.preventDefault()}>
-          <select data-testid="selectInput">
+          <select
+            data-testid="selectInput"
+            onChange={(e) => {
+              setRows(e.target.value);
+              setPages(Math.ceil(data.length / parseInt(e.target.value)));
+              setRange([0, parseInt(e.target.value) - 1]);
+            }}
+            defaultValue={rows}
+          >
             <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
           </select>
         </form>
 
         <div className="button-div" data-testid="buttonDiv">
-          <button>1</button>
-          <button>2</button>
-          <button>3</button>
-          <button>4</button>
-          <button>5</button>
+          {Array.from(Array(pages).keys()).map((a) => (
+            <button
+              key={a}
+              onClick={() => {
+                {
+                  console.log(rows, pages, range, a);
+                }
+                setRange([
+                  rows * a,
+                  Math.min(data.length - 1, rows * (a + 1) - 1),
+                ]);
+              }}
+            >
+              {a + 1}
+            </button>
+          ))}
         </div>
       </div>
 
-      <Table />
+      <Table data={data} range={range} />
     </>
   );
 };

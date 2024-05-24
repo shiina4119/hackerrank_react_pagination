@@ -1,6 +1,6 @@
 import React from "react";
 
-const Table = ({ data }) => {
+const Table = ({ data, range }) => {
   return (
     <div className="card">
       <table data-testid="table">
@@ -11,26 +11,16 @@ const Table = ({ data }) => {
           </tr>
         </thead>
         <tbody data-testid="tableBody">
-          <tr>
-            <td>India</td>
-            <td>New Delhi</td>
-          </tr>
-          <tr>
-            <td>Ukraine</td>
-            <td>Kyiv</td>
-          </tr>
-          <tr>
-            <td>Malaysia</td>
-            <td>Kuala Lumpur</td>
-          </tr>
-          <tr>
-            <td>Nijeria</td>
-            <td>Abuja</td>
-          </tr>
-          <tr>
-            <td>Malaysia</td>
-            <td>Male</td>
-          </tr>
+          {data.map((d, i) => {
+            if (i >= range[0] && i <= range[1]) {
+              return (
+                <tr key={i}>
+                  <td>{d.country}</td>
+                  <td>{d.city}</td>
+                </tr>
+              );
+            }
+          })}
         </tbody>
       </table>
     </div>
